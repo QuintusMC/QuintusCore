@@ -1,9 +1,9 @@
-package io.quintus;
+package io.quintus.quintuscore;
 
 import com.google.common.collect.Iterables;
 import com.google.common.io.ByteArrayDataInput;
 import com.google.common.io.ByteStreams;
-import io.quintus.tasks.BungeePlayerListUpdateTask;
+import io.quintus.quintuscore.tasks.BungeePlayerListUpdateTask;
 import org.bukkit.Server;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Listener;

@@ -1,14 +1,11 @@
-package io.quintus.tasks;
+package io.quintus.quintuscore.tasks;
 
 import com.google.common.io.ByteArrayDataOutput;
 import com.google.common.io.ByteStreams;
-import io.quintus.QuintusCore;
+import io.quintus.quintuscore.QuintusCore;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
-/**
- * Created by akrill on 3/24/15.
- */
 public class BungeePlayerListUpdateTask extends BukkitRunnable {
 
     private final QuintusCore plugin;
