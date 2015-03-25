@@ -18,9 +18,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-/**
- * Created by akrill on 3/24/15.
- */
 public class QuintusCore extends JavaPlugin implements Listener, PluginMessageListener {
 
     private Server server;
@@ -36,16 +33,8 @@ public class QuintusCore extends JavaPlugin implements Listener, PluginMessageLi
         logger = getLogger();
         messenger = this.server.getMessenger();
 
-        /* Check if we're a Spigot server, since non-Spigot can't do Bungee */
-        try {
-            server.getClass().getMethod("spigot");
-        } catch (NoSuchMethodException ex) {
-            logger.log(Level.WARNING, "Not a Spigot server, QuintusCore has no power here.");
-            return;
-        }
-
-        if (!server.spigot().getConfig().getBoolean("settings.bungeecord")) {
-            logger.log(Level.WARNING, "Spigot not configured in BungeeCord mode, QuintusCore has no power here.");
+        if (!isBungeeEnabled()) {
+            logger.log(Level.WARNING, "Either not Spigot or not configured in BungeeCord mode. Functionality limited.");
             return;
         }
 
@@ -72,11 +61,25 @@ public class QuintusCore extends JavaPlugin implements Listener, PluginMessageLi
         ByteArrayDataInput in = ByteStreams.newDataInput(message);
         String subchannel = in.readUTF();
         if (subchannel.equals("PlayerList")) {
-            if (in.readUTF() != "ALL") {
+            if (!in.readUTF().equals("ALL")) {
                 return;
             }
             bungeePlayers = in.readUTF().split(", ");
         }
+    }
+
+    public boolean isSpigot() {
+        try {
+            server.getClass().getMethod("spigot");
+            return true;
+        } catch (NoSuchMethodException ex) {
+            logger.log(Level.WARNING, "Not a Spigot server, QuintusCore has no power here.");
+            return false;
+        }
+    }
+
+    public boolean isBungeeEnabled() {
+        return isSpigot() && server.spigot().getConfig().getBoolean("settings.bungeecord");
     }
 
     public Player getOnlinePlayer() {
@@ -84,7 +87,7 @@ public class QuintusCore extends JavaPlugin implements Listener, PluginMessageLi
     }
 
     public List<String> getPlayerNameMatches(String prefix) {
-        List<String> matches = new ArrayList<String>();
+        List<String> matches = new ArrayList<>();
 
         if (bungeePlayers != null) {
             for (String playerName : bungeePlayers) {
